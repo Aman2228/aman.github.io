@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aman Prajapati — Thermal Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #111110;
+    --gold: #c9a96e;
+    --gold-dim: #9a7a4a;
+    --text: #e8e6e0;
+    --muted: #6b6860;
+    --border: rgba(201,169,110,0.15);
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Inter', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  canvas#waves {
+    position: fixed;
+    inset: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.35;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px 28px;
+  }
+
+  .nav-logo {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  .nav-links {
+    display: flex;
+    list-style: none;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 400;
+    margin-left: 28px;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--text); }
+
+  section, .contact-section, footer { position: relative; z-index: 1; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 40px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-name {
+    font-family: var(--serif);
+    font-size: clamp(72px, 11vw, 160px);
+    font-weight: 300;
+    letter-spacing: 6px;
+    color: var(--gold);
+    line-height: 0.92;
+    margin-bottom: 28px;
+  }
+
+  .hero-title {
+    font-family: var(--sans);
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    color: var(--muted);
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 48px;
+    background: linear-gradient(to bottom, var(--muted), transparent);
+    animation: scrollpulse 2s ease-in-out infinite;
+  }
+
+  @keyframes scrollpulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+
+  .section {
+    padding: 120px 28px;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .section-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 60px;
+    font-weight: 400;
+  }
+
+  /* ABOUT */
+  .about-layout {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .about-text p {
+    font-size: 15px;
+    color: var(--text);
+    font-weight: 300;
+    line-height: 1.8;
+    margin-bottom: 20px;
+  }
+
+  .skill-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 32px;
+  }
+
+  .pill {
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 10px;
+    padding: 6px 14px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: all 0.2s;
+    cursor: default;
+  }
+
+  .pill:hover { border-color: var(--gold-dim); color: var(--gold); }
+
+  /* EXPERIENCE */
+  .exp-list { display: flex; flex-direction: column; }
+
+  .exp-row {
+    display: grid;
+    grid-template-columns: 180px 280px 1fr;
+    gap: 40px;
+    align-items: start;
+    padding: 40px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .exp-row:first-child { border-top: 1px solid rgba(255,255,255,0.05); }
+
+  .exp-date {
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: var(--muted);
+    padding-top: 4px;
+    text-transform: uppercase;
+  }
+
+  .exp-company {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 300;
+    color: var(--text);
+    margin-bottom: 4px;
+    letter-spacing: 1px;
+  }
+
+  .exp-role {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  .exp-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+    font-weight: 300;
+    padding-top: 4px;
+  }
+
+  /* PROJECTS */
+  .projects-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 40px;
+  }
+
+  .projects-count { font-size: 11px; color: var(--muted); letter-spacing: 1px; }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: rgba(255,255,255,0.04);
+  }
+
+  .project-card {
+    background: var(--bg);
+    padding: 40px;
+    position: relative;
+    cursor: default;
+    transition: background 0.3s;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .project-card:hover { background: #161614; }
+
+  .project-arrow {
+    position: absolute;
+    top: 28px; right: 28px;
+    font-size: 14px;
+    color: var(--muted);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .project-card:hover .project-arrow { opacity: 1; }
+
+  .project-name {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--text);
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+    line-height: 1.2;
+  }
+
+  .project-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.7;
+    font-weight: 300;
+    flex: 1;
+    margin-bottom: 20px;
+  }
+
+  .project-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  .project-tag {
+    border: 1px solid rgba(255,255,255,0.08);
+    color: var(--muted);
+    font-size: 9px;
+    padding: 4px 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  /* CONTACT */
+  .contact-section {
+    text-align: center;
+    padding: 140px 28px 100px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .contact-heading {
+    font-family: var(--serif);
+    font-size: clamp(48px, 7vw, 100px);
+    font-weight: 300;
+    color: var(--text);
+    letter-spacing: 4px;
+    margin-bottom: 24px;
+    line-height: 1;
+  }
+
+  .contact-sub {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 300;
+    margin-bottom: 48px;
+  }
+
+  .contact-email {
+    display: inline-block;
+    font-family: var(--serif);
+    font-size: clamp(20px, 3vw, 36px);
+    color: var(--gold);
+    text-decoration: none;
+    letter-spacing: 2px;
+    font-weight: 300;
+    margin-bottom: 56px;
+    transition: color 0.2s;
+  }
+
+  .contact-email:hover { color: var(--text); }
+
+  .contact-links { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+
+  .contact-btn {
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 10px;
+    padding: 12px 28px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .contact-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
+
+  footer {
+    padding: 24px 28px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  footer p { font-size: 11px; color: var(--muted); font-weight: 300; }
+
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: #2a2a28; }
+
+  @media (max-width: 768px) {
+    .about-layout { grid-template-columns: 1fr; gap: 40px; }
+    .exp-row { grid-template-columns: 1fr; gap: 6px; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .section { padding: 80px 20px; }
+    nav { padding: 18px 20px; }
+    .nav-links a { margin-left: 16px; font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="waves"></canvas>
+
+<nav>
+  <div class="nav-logo">AP</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-name">AMAN<br>PRAJAPATI</div>
+  <div class="hero-title">Thermal Engineer</div>
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    SCROLL
+  </div>
+</section>
+
+<!-- ABOUT -->
+<div id="about">
+  <div class="section">
+    <div class="section-label fade-in">About</div>
+    <div class="about-layout">
+      <div></div>
+      <div class="about-text fade-in" style="transition-delay:0.1s">
+        <p>I'm a Thermal Engineering M.Tech student at IIT Delhi (CGPA 9.31, Rank #2) with a deep focus on computational fluid dynamics, gas dynamics, and heat transfer. I build and validate high-fidelity simulations of complex thermal and flow systems.</p>
+        <p>From scramjet combustor aerodynamics to Peltier-based electronic cooling — I care about engineering that works at every layer of the physics.</p>
+        <div class="skill-pills">
+          <span class="pill">ANSYS Fluent</span>
+          <span class="pill">k-ε / k-ω SST</span>
+          <span class="pill">FVM / RANS</span>
+          <span class="pill">Gas Dynamics</span>
+          <span class="pill">Convective HT</span>
+          <span class="pill">Aerodynamics</span>
+          <span class="pill">Python</span>
+          <span class="pill">MATLAB</span>
+          <span class="pill">SolidWorks</span>
+          <span class="pill">COMSOL</span>
+          <span class="pill">Scramjet CFD</span>
+          <span class="pill">FEA</span>
+          <span class="pill">Turbulence Modelling</span>
+          <span class="pill">Boundary Layer Theory</span>
+          <span class="pill">Conjugate HT</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EXPERIENCE -->
+<div id="experience">
+  <div class="section" style="padding-top:0">
+    <div class="section-label fade-in">Experience</div>
+    <div class="exp-list">
+
+      <div class="exp-row fade-in">
+        <div class="exp-date">May 2026 — Jul 2026</div>
+        <div>
+          <div class="exp-company">TVS Motor Company</div>
+          <div class="exp-role">Project Trainee — Thermal / Powertrain</div>
+        </div>
+        <div class="exp-desc">EV thermal management and powertrain simulation. Applying CHT, k-ω SST modelling, and battery thermal management (BTM) systems analysis to real automotive engineering problems.</div>
+      </div>
+
+      <div class="exp-row fade-in" style="transition-delay:0.1s">
+        <div class="exp-date">Jan 2025 — Jun 2025</div>
+        <div>
+          <div class="exp-company">Infineon Technologies</div>
+          <div class="exp-role">Supply Chain Planner Intern — Bangalore</div>
+        </div>
+        <div class="exp-desc">Applied statistical methods (exponential moving average, distribution fitting) for production cycle time forecasting. Analyzed semiconductor manufacturing bottlenecks using SAP and data-driven optimization.</div>
+      </div>
+
+      <div class="exp-row fade-in" style="transition-delay:0.2s">
+        <div class="exp-date">May 2024 — Jul 2024</div>
+        <div>
+          <div class="exp-company">NIT Warangal</div>
+          <div class="exp-role">Summer Research Intern — EPICS Lab</div>
+        </div>
+        <div class="exp-desc">Designed a Peltier-based cooling system achieving 22W heat dissipation with COP of 2.96. Optimized heat sink configuration through experimental parametric studies on module orientation and stacking arrangements.</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- PROJECTS -->
+<div id="projects">
+  <div class="section" style="padding-top:0">
+    <div class="projects-header fade-in">
+      <div class="section-label" style="margin-bottom:0">Selected Work</div>
+      <div class="projects-count">(08)</div>
+    </div>
+    <div class="projects-grid">
+
+      <div class="project-card fade-in">
+        <span class="project-arrow">↗</span>
+        <div>
+          <div class="project-name">Internal Pipe Flow</div>
+          <div class="project-desc">Boundary layer growth, establishment length, and velocity profiles using SIMPLE and k-ε. Validated against analytical and benchmark correlations for both laminar and turbulent regimes.</div>
+        </div>
+        <div class="project-tags">
+          <span class="project-tag">ANSYS Fluent</span>
+          <span class="project-tag">k-ε</span>
+          <span class="project-tag">SIMPLE</span>
+          <span class="project-tag">Laminar/Turbulent</span>
+        </div>
+      </div>
+
+      <div class="project-card fade-in" style="transition-delay:0.05s">
+        <span class="project-arrow">↗</span>
+        <div>
+          <div class="project-name">Circular Cylinder Wake</div>
+          <div class="project-desc">Transient CFD simulation of wake formation, vortex shedding, and flow separation. Drag and lift coefficient analysis at multiple Reynolds numbers.</div>
+        </div>
+        <div class="project-tags">
+          <span class="project-tag">Transient CFD</span>
+          <span class="project-tag">Vortex Shedding</span>
+          <span class="project-tag">Drag/Lift</span>
+        </div>
+      </div>
+
+      <div class="project-card fade-in" style="transition-delay:0.1s">
+        <span class="project-arrow">↗</span>
+        <div>
+          <div class="project-name">Lid-Driven Cavity</div>
+          <div class="project-desc">Non-dimensional 2D incompressible flow with vortex structure analysis. Benchmark validated against Ghia et al. across multiple Re numbers.</div>
+        </div>
+        <div class="project-tags">
+          <span class="project-tag">2D Incompressible</span>
+          <span class="project-tag">Vortex Analysis</span>
+          <span class="project-tag">Ghia Validation</span>
+        </div>
+      </div>
+
+      <div class="project-card fade-in" style="transition-delay:0.15s">
+        <span class="project-arrow">↗</span>
+        <div>
+          <div class="project-name">Natural Convection in Cavities</div>
+          <div class="project-desc">Buoyancy-driven transient flow using Boussinesq approximation. Local and average Nusselt number evaluation with less than 3% deviation from established correlations.</div>
+        </div>
+        <div class="project-tags">
+          <span class="project-tag">Boussinesq</span>
+          <span class="project-tag">Nusselt Number</span>
+          <span class="project-tag">Transient</span>
+        </div>
+      </div>
+
+      <div class="project-card fade-in" style="transition-delay:0.2s">
+        <span class="project-arrow">↗</span>
+        <div>
+          <div class="project-name">Conjugate HT — Porous Media</div>
+          <div class="project-desc">Coupled solid-fluid heat transfer using Darcy-Brinkman formulations. Parametric study across porosity and permeability values.</div>
+        </div>
+        <div class="project-tags">
+          <span class="project-tag">Porous Media</span>
+          <span class="project-tag">Darcy-Brinkman</span>
+          <span class="project-tag">CHT</span>
+        </div>
+      </div>
+
+      <div class="project-card fade-in" style="transition-delay:0.25s">
+        <span class="project-arrow">↗</span>
+        <div>
+          <div class="project-name">Peltier Cooling System</div>
+          <div class="project-desc">Thermoelectric cooling design achieving 22W heat dissipation with COP of 2.96. Experimental optimization of heat sink orientation and stacking configuration.</div>
+        </div>
+        <div class="project-tags">
+          <span class="project-tag">Peltier / TEC</span>
+          <span class="project-tag">COP 2.96</span>
+          <span class="project-tag">22W Dissipation</span>
+        </div>
+      </div>
+
+      <div class="project-card fade-in" style="transition-delay:0.3s">
+        <span class="project-arrow">↗</span>
+        <div>
+          <div class="project-name">Rocket Casing Optimization</div>
+          <div class="project-desc">Structural and thermal FEA in ANSYS Workbench for Al-Ti hybrid configurations. 0.47% stress reduction via edge geometry optimization in SolidWorks.</div>
+        </div>
+        <div class="project-tags">
+          <span class="project-tag">FEA</span>
+          <span class="project-tag">ANSYS Workbench</span>
+          <span class="project-tag">Al-Ti Hybrid</span>
+        </div>
+      </div>
+
+      <div class="project-card fade-in" style="transition-delay:0.35s">
+        <span class="project-arrow">↗</span>
+        <div>
+          <div class="project-name">Scramjet Combustor CFD</div>
+          <div class="project-desc">Supersonic strut-cavity scramjet configurations replicating Kummitha et al. (2018) and Soni & De (2017) in ANSYS Fluent 2024 R2. DLR combustor with cavity flame holder.</div>
+        </div>
+        <div class="project-tags">
+          <span class="project-tag">Scramjet</span>
+          <span class="project-tag">Supersonic</span>
+          <span class="project-tag">DLR Combustor</span>
+          <span class="project-tag">In Progress</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<div class="contact-section" id="contact">
+  <div class="contact-heading fade-in">Let's Connect</div>
+  <p class="contact-sub fade-in" style="transition-delay:0.1s">Open to research collaborations, CFD discussions, and opportunities in thermal engineering.</p>
+  <br><br>
+  <a href="mailto:amanvprajapati8@gmail.com" class="contact-email fade-in" style="transition-delay:0.15s">amanvprajapati8@gmail.com</a>
+  <br><br><br>
+  <div class="contact-links fade-in" style="transition-delay:0.2s">
+    <a href="tel:+917715079808" class="contact-btn">+91 77150 79808</a>
+    <a href="https://linkedin.com/in/amanp2003" target="_blank" class="contact-btn">LinkedIn</a>
+    <a href="#" class="contact-btn">IIT Delhi · 2025MET2767</a>
+  </div>
+</div>
+
+<footer>
+  <p>Aman Prajapati — M.Tech Thermal Engineering, IIT Delhi</p>
+  <p>CGPA 9.31 · Rank #2</p>
+</footer>
+
+<script>
+// WAVE CANVAS
+const canvas = document.getElementById('waves');
+const ctx = canvas.getContext('2d');
+let W, H, t = 0;
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resize);
+resize();
+
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+  const lines = 30;
+  const spacing = H / lines;
+
+  for (let i = 0; i < lines; i++) {
+    const y = i * spacing + spacing / 2;
+    const amp = 5 + Math.sin(i * 0.4 + t * 0.3) * 3;
+    const freq = 0.008 + Math.sin(i * 0.15) * 0.003;
+    const phase = i * 0.6 + t * 0.4;
+
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    for (let x = 0; x <= W; x += 4) {
+      const wy = y
+        + Math.sin(x * freq + phase) * amp
+        + Math.sin(x * freq * 0.5 + phase * 0.7) * (amp * 0.4);
+      ctx.lineTo(x, wy);
+    }
+    ctx.strokeStyle = `rgba(201,169,110,${0.055 + Math.sin(i * 0.3 + t * 0.2) * 0.025})`;
+    ctx.lineWidth = 0.7;
+    ctx.stroke();
+  }
+
+  t += 0.012;
+  requestAnimationFrame(draw);
+}
+draw();
+
+// FADE IN
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(el => {
+    if (el.isIntersecting) el.target.classList.add('visible');
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
